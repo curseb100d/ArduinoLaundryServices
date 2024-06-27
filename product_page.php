@@ -49,20 +49,59 @@ if(isset($message)){
 
 ?>
 
-    <div class="container">
-        <div class="main-page-new-laundry-container">
+<div class="container">
+
+    <div class="admin-product-form-container">
 
         <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
             <h3>New Laundry Product</h3>
-            <label for="product_name">Product Name:</label>
+            <!-- <label for="product_name">Product Name:</label> -->
             <input type="text" placeholder="Enter Product Name" name="product_name" class="box"></br>
-            <label for="product_price">Price</label>
+            <!-- <label for="product_price">Price</label> -->
             <input type="text" placeholder="Enter Price" name="product_price" class="box"></br>
             <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box">
             <input type="submit" class="btn" name="add_product" value="add product">
         </form>
 
-        </div>
     </div>
+
+    <?php
+    
+        $select = mysqli_query($conn, "SELECT * FROM laundry_products");
+
+    ?>
+
+    <div class="product-display">
+
+        <table class="product-display-table">
+
+            <thead>
+                <tr>
+                    <th>product image</th>
+                    <th>product name</th>
+                    <th>product price</th>
+                    <th>action</th>
+                </tr>
+            </thead>
+
+            <?php while($row = mysqli_fetch_assoc($select)){ ?>
+
+            <tr>
+                <td><img src="uploaded_images/<?php echo $row['image']; ?>" height="100" alt=""></td>
+                <td><?php echo $row['name']; ?></td>
+                <td>P<?php echo $row['price']; ?></td>
+                <td>
+                    <a href="product_update.php?edit=<?php echo $row['id']; ?>" class="btn"> <i class="fas fa-edit"></i> edit </a>
+                    <a href="product_page.php?delete=<?php echo $row['id']; ?>" class="btn"> <i class="fas fa-trash"></i> delete </a>
+                </td>
+            </tr>
+
+            <?php }; ?>
+
+        </table>
+
+    </div>
+
+</div>
 </body>
 </html>
