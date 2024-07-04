@@ -33,6 +33,7 @@ html{
     padding: 1rem 3rem;
     background: var(--green);
     color: var(--white);
+    text-align: center;
 }
 
 .btn:hover{
@@ -53,6 +54,10 @@ html{
     max-width: 1200px;
     padding: 2rem;
     margin: 0 auto;
+}
+
+.admin-product-form-container.centered{
+    
 }
 
 .admin-product-form-container form{

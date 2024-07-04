@@ -22,7 +22,13 @@ if(isset($_POST['add_product'])){
             $message[] = 'cannot add a laundry product';
         }
     }
-}
+};
+
+if(isset($_GET['delete'])){
+    $id = $_GET['delete'];
+    mysqli_query($conn, "DELETE FROM laundry_products WHERE id = $id");
+    header('location:product_page.php');
+};
 
 ?>
 
@@ -32,7 +38,10 @@ if(isset($_POST['add_product'])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <title>Product Page</title>
+
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
 
     <!-- CSS File Link -->
     <link rel="stylesheet" href="css/styles2.css">
