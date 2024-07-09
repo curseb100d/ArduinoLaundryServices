@@ -67,7 +67,7 @@ if(isset($message)){
             <!-- <label for="product_name">Product Name:</label> -->
             <input type="text" placeholder="Enter Product Name" name="product_name" class="box"></br>
             <!-- <label for="product_price">Price</label> -->
-            <input type="text" placeholder="Enter Price" name="product_price" class="box"></br>
+            <input type="number" placeholder="Enter Price" name="product_price" class="box"></br>
             <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box">
             <input type="submit" class="btn" name="add_product" value="add product">
         </form>

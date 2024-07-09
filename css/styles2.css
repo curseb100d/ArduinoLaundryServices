@@ -57,7 +57,11 @@ html{
 }
 
 .admin-product-form-container.centered{
-    tertret
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    
 }
 
 .admin-product-form-container form{
