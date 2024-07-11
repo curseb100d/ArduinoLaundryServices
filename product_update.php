@@ -67,9 +67,7 @@ if(isset($message)){
 
         <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
             <h3>Update Laundry Product</h3>
-            <!-- <label for="product_name">Product Name:</label> -->
             <input type="text" placeholder="Enter Product Name" value="<?php echo $row['name']; ?>" name="product_name" class="box"></br>
-            <!-- <label for="product_price">Price</label> -->
             <input type="number" placeholder="Enter Price" value="<?php echo $row['price']; ?>" name="product_price" class="box"></br>
             <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box">
             <input type="submit" class="btn" name="update_product" value="update product">
