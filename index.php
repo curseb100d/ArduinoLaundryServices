@@ -1,146 +1,125 @@
+<?php
+// Initialize the session
+session_start();
+
+// Check if the user is already logged in, if yes then redirect him to main page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: main_page.php");
+    exit;
+} 
+
+// Include config file
+require_once "config.php";
+
+// Define variables and initialize with empty values
+$email = $password = "";
+$email_err = $password_err = $login_err = "";
+
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // Check if email is empty
+    if(empty(trim($_POST["email"]))){
+        $email_err = "Please enter email.";
+    } else{
+        $email = trim($_POST["email"]);
+    }
+
+    // Check if password is empty
+    if(empty(trim($_POST["password"]))){
+        $password_err = "Please enter your password.";
+    } else{
+        $password = trim($_POST["password"]);
+    }
+
+    // Valid credentials
+    if(empty($email_err) && empty ($password_err)){
+        // Prepare a select statement
+        $sql = "SELECT adminuser_id, email, password FROM adminuser WHERE email = :email";
+
+        if($stmt = $pdo->prepare($sql)){
+            // Bind variables to the prepared statement as parameters
+            $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
+
+            // Set parameters
+            $param_email = trim($_POST["email"]);
+
+            //Attempt to execute the prepared statement
+            if($stmt->execute()){
+                // Check if email exists, if yes then verify password
+                if($stmt->rowCount() == 1){
+                    if($row = $stmt->fetch()){
+                        $adminuser_id = $row["adminuser_id"];
+                        $email = $row["email"];
+                        $hashed_password = $row["password"];
+                        if(password_verify($password, $hashed_password)){
+                            // Password is correct, so start a new session
+                            session_start();
+
+                            // Store data in session variables
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["adminuser_id"] = $adminuser_id;
+                            $_SESSION["email"] = $email;
+
+                            // Redirect user to welcome page
+                            header("location: main_page.php");
+                        } else{
+                            // Password is not valid, display a generic error message
+                            $login_err = "Invalid email or password.";
+                        }
+                    }
+                } else{
+                    // Email doesn't exist, display a generic error message
+                    $login_err = "Invalid email or password.";
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+
+            // Close statement
+            unset($stmt);
+        }
+    }
+
+    // Close connection
+    unset($pdo);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="styles.css">
-    <title>Bubble Queen Laundry Services</title>
+    <title>Sign In</title>
 </head>
-
 <body>
     <div class="wrapper">
-        <nav class="nav">
-            <div class="nav-logo">
-                <p>BUBBLE QUEEN</p>
-            </div>
-            <div class="nav-menu" id="navMenu">
-                <ul>
-                    <li><a href="#" class="link active">Home</a></li>
-                </ul>
-            </div>
-            <div class="nav-button">
-                <buttton class="btn white-btn" id="loginBtn" onclick="login()">Sign In</buttton>
-                <buttton class="btn" id="registerBtn" onclick="register()">Sign Up</buttton>
-            </div>
-            <div class="nav-menu-btn">
-                <i class="bx bx-menu" onclick="myMenuFunction()"></i>
-            </div>
-        </nav>
+        <h2>Login<h2>
+        <p>Please fill in your credentials to login.</p>
 
-        <!-------------------------------------- Form Box ------------------------------------->
-        <div class="form-box">
+        <?php
+        if(!empty($login_err)){
+            echo '<div class="alert alert-danger">' . $login_err . '</div>';
+        }
+        ?>
 
-            <!----------------- Login Form --------------------------->
-            <div class="login-container" id="login">
-                <div class="top">
-                    <span>Don't have an account? <a href="#" onclick="register()">Sign Up</a></span>
-                    <header>Login</header>
-                </div>
-                <div class="input-box">
-                    <input type="text" class="input-field" placeholder="Username or Email">
-                    <i class="bx bx-user"></i>
-                </div>
-                <div class="input-box">
-                    <input type="password" class="input-field" placeholder="Password">
-                    <i class="bx bx-lock-alt"></i>
-                </div>
-                <div class="input-box">
-                    <input type="submit" class="submit" value="Sign In">
-                </div>
-                <div class="two-col">
-                    <div class="one">
-                        <input type="checkbox" id="login-check">
-                        <label for="login-check"> Remember Me</label>
-                    </div>
-                    <div class="two">
-                        <label><a href="#">Forgot Password?</a></label>
-                    </div>
-                </div>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>">
+                <span class="invalid-feedback"><?php echo $email_err; ?></span>
             </div>
-
-            <!----------------- Registration Form --------------------------->
-            <div class="register-container" id="register">
-                <div class="top">
-                    <span>Have an account? <a href="#" onclick="login()">Login</a></span>
-                    <header>Sign Up</header>
-                </div>
-                <div class="two-forms">
-                    <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Firstname">
-                        <i class="bx bx-user"></i>
-                    </div>
-                    <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Lastname">
-                        <i class="bx bx-user"></i>
-                    </div>
-                </div>
-                <div class="input-box">
-                    <input type="text" class="input-field" placeholder="Email">
-                    <i class="bx bx-envelope"></i>
-                </div>
-                <div class="input-box">
-                    <input type="password" class="input-field" placeholder="Password">
-                    <i class="bx bx-lock-alt"></i>
-                </div>
-                <div class="input-box">
-                    <input type="submit" class="submit" value="Register">
-                </div>
-                <div class="two-col">
-                    <div class="one">
-                        <input type="checkbox" id="regsiter-check">
-                        <label for="register-check"> Remember Me</label>
-                    </div>
-                    <div class="two">
-                        <label><a href="#">Terms & Conditions</a></label>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
+                <span class="invalid-feedback"><?php echo $password_err; ?></span>
             </div>
-        </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Login">
+            </div>
+            <p>"Don't have an account? <a href="signup.php">Sign up now</a>.</p>
+        </form>
     </div>
-
-    <script>
-
-        function myMenuFunction() {
-            var i = document.getElementById("navMenu");
-
-            if (i.className === "nav-menu") {
-                i.className += " responsive";
-            } else {
-                i.className = "nav-menu";
-            }
-        }
-
-    </script>
-
-    <script>
-        var a = document.getElementById("loginBtn");
-        var b = document.getElementById("registerBtn");
-        var x = document.getElementById("login");
-        var y = document.getElementById("register");
-
-        function login() {
-            x.style.left = "4px";
-            y.style.right = "-520px";
-            a.className += " white-btn"
-            b.className = "btn";
-            x.style.opacity = 1;
-            y.style.opacity = 0;
-        }
-
-        function register() {
-            x.style.left = "-510px";
-            y.style.right = "5px";
-            a.className = "btn";
-            b.className += " white-btn";
-            x.style.opacity = 0;
-            y.style.opacity = 1;
-        }
-
-    </script>
-
 </body>
-
 </html>

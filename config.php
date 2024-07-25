@@ -2,18 +2,19 @@
 
 $conn = mysqli_connect('localhost','root','','arduinolaundry_db');
 
-    class arduino{
-        public static function connect()
-        {
-            try {
-                $conn = new PDO('mysql:localhost=host; dbname=arduinolaundry_db', 'root', '');
-                return $conn;
-            } catch(PDOException $error1) {
-                echo 'Theres a Problem'.$error1->getMessage();
-            } catch(Exception $error2) {
-                echo 'Connection Error!'.$error2->getMessage();
-            }
-        }
-    }
+/*Database Credentials*/
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'arduinolaundry_db');
+
+/*Attempt to connect to MySQL database */
+try{
+    $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
+    //Set the PDO error mode to exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e){
+    die("ERROR: Could not connect. " . $e->getMessage());
+}
 
 ?>
