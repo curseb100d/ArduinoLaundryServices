@@ -41,12 +41,14 @@ if(isset($_GET['delete'])){
     <title>Product Page</title>
 
     <!-- font awesome cdn link -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
 
     <!-- CSS File Link -->
-    <link rel="stylesheet" href="css/styles2.css">
+    <link rel="stylesheet" href="css/styles3.css">
 </head>
 <body>
+
+<?php include 'header.php'; ?>
 
 <?php
 
@@ -110,5 +112,8 @@ if(isset($message)){
     </div>
 
 </div>
+
+<!-- Custom JS File Link -->
+<script src="js/script.js"></script>
 </body>
 </html>
