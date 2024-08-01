@@ -17,7 +17,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <title>Main</title>
 
     <!-- CSS File Link -->
-    <link rel="stylesheet" href="css/styles3.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <?php include 'navigation.php'; ?>

@@ -44,11 +44,11 @@ if(isset($_GET['delete'])){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
 
     <!-- CSS File Link -->
-    <link rel="stylesheet" href="css/styles3.css">
+    <link rel="stylesheet" href="css/styles2.css">
 </head>
 <body>
 
-<?php include 'header.php'; ?>
+<?php /*include 'navigation.php';*/ ?>
 
 <?php
 
