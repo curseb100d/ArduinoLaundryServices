@@ -18,8 +18,10 @@
             <p>Kindly weight your laundry</p>
             <p>Minimum: 8kg</p>
             <input type="number" id="userInput" placeholder="Kilo">
-            <p id="result"></p>
         </div>
+
+        <p id="result"></p>
+        <p id="DivisorResult"></p>
 
         <div class="tab">
             <h1>Choose Laundry Type</h1>
@@ -30,6 +32,7 @@
             <input type="radio" id="type" value="Wash + Dry + Fold">
             <label for="type">Wash + Dry + Fold</label>
         </div>
+        <button type="button">Next</button>
 
     </form>
 
@@ -39,15 +42,38 @@
             var result = document.getElementById('result');
 
             if (input <= 8) {
-                result.textContent = 1;
+                result.textContent = 1 + " Load";
             } else if (input <= 16) {
-                result.textContent = 2;
+                result.textContent = 2 + " Loads";
             } else if (input <= 24) {
-                result.textContent = 3;
+                result.textContent = 3 + " Loads";
             } else {
-                result.textContent = 4;
+                result.textContent = 4 + " Loads";
             }
         });
+
+        function performDivision() {
+            var input = document.getElementById('userInput').value;
+            // var divisor = document.getElementById('divisorInput').value;
+            var divisorResult = document.getElementById('DivisorResult');
+
+            if (input <= 8) {
+                var divisionResult = input / 1;
+                divisorResult.textContent = "Result: " + divisionResult;
+            } else if (input <= 16) {
+                var divisionResult = input / 2;
+                divisorResult.textContent = "Result: " + divisionResult;
+            } else if (input <= 24) {
+                var divisionResult = input / 3;
+                divisorResult.textContent = "result: " + divisionResult;
+            } else {
+                var divisionResult = input / 4;
+                divisorResult.textContent = "result: " + divisionResult;
+            }
+        }
+
+        document.getElementById('userInput').addEventListener('input', performDivision);
+        // document.getElementById('divisorInput').addEventListener('input', performDivision);
     </script>
 </body>
 </html>
