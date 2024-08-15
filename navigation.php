@@ -3,6 +3,7 @@
         <a href="#">ARDUINO</a>
         <a href="newlaundry.php">New</a>
         <a href="#">List</a>
+        <a href="product_page.php">Product List</a>
         <a href="logout.php" class="split">Logout</a>
     </div>
 </header>
