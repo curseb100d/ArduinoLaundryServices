@@ -2,6 +2,16 @@
 // Include database connection
 @include 'config.php';
 
+// Fetch customers from customeruser table using PDO
+$stmt = $pdo->prepare("SELECT customeruser_id, firstname, lastname, email, number FROM customeruser");
+$stmt->execute();
+$customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<?php
+// Include database connection
+@include 'config.php';
+
 // Fetch laundry products from database
 $select_products = mysqli_query($conn, "SELECT * FROM laundry_products WHERE name IN ('Surf', 'Ariel', 'Downy')");
 ?>
@@ -90,6 +100,17 @@ $select_products = mysqli_query($conn, "SELECT * FROM laundry_products WHERE nam
 
     <!-- Customer Details Form (Modal or Section) -->
     <div id="customerDetailsForm" style="display:none;">
+        <h2>Select Customer</h2>
+        <select id="customerSelect" required>
+            <option value="">-- Select a Customer --</option>
+            <?php foreach($customers as $customer) { ?>
+                <option value="<?php echo $customer['customeruser_id']; ?>">
+                    <?php echo $customer['firstname'] . ' ' . $customer['lastname'] . ' (' . $customer['email'] . ')'; ?>
+                </option>
+            <?php } ?>
+        </select>
+        <br><br>
+
         <h2>Enter Customer Details</h2>
         <input type="text" id="firstName" placeholder="First Name" required><br>
         <input type="text" id="lastName" placeholder="Last Name" required><br>
@@ -228,6 +249,27 @@ $select_products = mysqli_query($conn, "SELECT * FROM laundry_products WHERE nam
     document.getElementById('saveButton').addEventListener('click', function() {
         document.getElementById('customerDetailsForm').style.display = 'block';
     });
+
+    document.getElementById('customerSelect').addEventListener('change', function() {
+        var selectedCustomerId = this.value;
+        
+        if (selectedCustomerId) {
+            var selectedOption = this.options[this.selectedIndex];
+            var customerDetails = selectedOption.text.match(/(.*) \((.*)\)$/);
+            
+            document.getElementById('firstName').value = customerDetails[1].split(' ')[0];
+            document.getElementById('lastName').value = customerDetails[1].split(' ')[1];
+            document.getElementById('email').value = customerDetails[2];
+            document.getElementById('phone').value = selectedOption.dataset.number; // Assuming you also store the phone number in a data attribute
+        } else {
+            // Clear fields if no customer is selected
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+        }
+    });
+
 </script>
 
 </body>
